@@ -1,23 +1,17 @@
 <?php
 
-
-    class VueloModel extends Basedatos{
+    class AeropuertoModel extends Basedatos{
         private $table;
         private $conexion;
         
         public function __construct(){
-            $this->table = "vuelo";
+            $this->table = "aeropuerto";
             $this->conexion = $this->getConexion();
         }
         
         public function getAll(){
             try {
-                $sql = "SELECT v.identificador, v.aeropuertoorigen, v.aeropuertodestino, v.tipovuelo, v.fechavuelo, "
-                        . "a.nombre 'nombre aeropuerto', a.pais, COUNT(p.identificador) 'numpasajero' "
-                        . "FROM $this->table v LEFT JOIN pasaje p ON (v.identificador=p.identificador) "
-                        . "JOIN aeropuerto a ON v.aeropuertodestino = a.codaeropuerto "
-                        . "GROUP BY v.identificador;";
-                
+                $sql = "SELECT * FROM $this->table;";
                 $statement = $this->conexion->query($sql);
                 $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
                 $statement = null;
