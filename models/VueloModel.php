@@ -12,11 +12,14 @@
         
         public function getAll(){
             try {
-                $sql = "SELECT v.identificador, v.aeropuertoorigen, v.aeropuertodestino, v.tipovuelo, v.fechavuelo, "
-                        . "a.nombre 'nombre aeropuerto', a.pais, COUNT(p.identificador) 'numpasajero' "
-                        . "FROM $this->table v LEFT JOIN pasaje p ON (v.identificador=p.identificador) "
-                        . "JOIN aeropuerto a ON v.aeropuertodestino = a.codaeropuerto "
-                        . "GROUP BY v.identificador;";
+                $sql = "SELECT v.identificador, v.aeropuertoorigen, aeropuerto_origen.nombre AS 'nombreorigen', 
+                    aeropuerto_origen.pais AS 'paisorigen', v.aeropuertodestino, a.nombre AS 'nombredestino', 
+                    a.pais AS 'paisdestino', v.tipovuelo, v.fechavuelo, COUNT(p.identificador) AS 'numpasajero' 
+                    FROM vuelo v 
+                    LEFT JOIN pasaje p ON (v.identificador = p.identificador) 
+                    JOIN aeropuerto a ON v.aeropuertodestino = a.codaeropuerto 
+                    JOIN aeropuerto aeropuerto_origen ON v.aeropuertoorigen = aeropuerto_origen.codaeropuerto 
+                    GROUP BY v.identificador;";
                 
                 $statement = $this->conexion->query($sql);
                 $registros = $statement->fetchAll(PDO::FETCH_ASSOC);

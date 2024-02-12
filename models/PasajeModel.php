@@ -24,7 +24,7 @@
         
         public function deletePasaje($idpasaje){
             try {
-                $sql = "delete from $this->table where idpasaje= ? ";
+                $sql = "DELETE FROM $this->table WHERE idpasaje= ? ";
                 $sentencia = $this->conexion->prepare($sql);
                 $sentencia->bindParam(1, $idpasaje);
                 $num = $sentencia->execute();

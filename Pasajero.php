@@ -11,7 +11,7 @@
     // devuelve o 1 o todos, dependiendo si recibe o no parámetro
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         if (isset($_GET['identificador'])) {
-            $res = $dep->getUnVuelo($_GET['identificador']);
+            $res = $dep->getUnPasajero($_GET['identificador']);
             echo json_encode($res);
             exit();
         } else {
