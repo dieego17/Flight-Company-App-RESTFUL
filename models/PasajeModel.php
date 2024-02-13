@@ -9,6 +9,11 @@
             $this->conexion = $this->getConexion();
         }
         
+        /**
+         * Devuelve todos los pasajes
+         * 
+         * @return type
+         */
         public function getAll(){
             try {
                 $sql = "SELECT * FROM $this->table;";
@@ -22,6 +27,12 @@
             }
         }
         
+        /**
+         * Método que boora un psaje en concreto
+         * 
+         * @param type $idpasaje
+         * @return type
+         */
         public function deletePasaje($idpasaje){
             try {
                 $sql = "DELETE FROM $this->table WHERE idpasaje= ? ";
@@ -36,5 +47,32 @@
                 return "ERROR AL BORRAR.<br>" . $e->getMessage();
             }
         }
+        
+        
+        /**
+         * Devuelve un array con todos los pasajes de ese identificador de vuelo
+         * 
+         * @param type $identificador
+         * @return string
+         */
+        public function getUnPasaje($identificador){
+            try {
+                $sql = "SELECT ps.idpasaje, p.nombre, p.pais, ps.pasajerocod, ps.numasiento, ps.clase, ps.pvp "
+                        . "FROM $this->table ps "
+                        . "JOIN pasajero p ON ps.pasajerocod = p.pasajerocod "
+                        . "WHERE ps.identificador = ?;";
+                $sentencia = $this->conexion->prepare($sql);
+                $sentencia->bindParam(1, $identificador);
+                $sentencia->execute();
+                $row = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+                if ($row) {
+                    return $row;
+                }
+                return "SIN DATOS";
+            } catch (PDOException $e) {
+                return "ERROR AL CARGAR.<br>" . $e->getMessage();
+            }
+        }
+        
     }
 

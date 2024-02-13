@@ -9,6 +9,11 @@
             $this->conexion = $this->getConexion();
         }
         
+        /**
+         * Método que devuelve todos los pasajeros
+         * 
+         * @return type
+         */
         public function getAll(){
             try {
                 $sql = "SELECT * FROM $this->table;";

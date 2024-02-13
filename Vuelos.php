@@ -20,6 +20,15 @@
             exit();
         }
     }
+    
+    // DELETE, borra el vuelo que le pasamos por parámetro
+    if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+        $identificador = $_GET['identificador'];
+        $res = $dep->deleteVuelo($identificador);
+        $resul['resultado'] = $res;
+        echo json_encode($resul);
+        exit();
+    }
 
     // En caso de que ninguna de las opciones anteriores se haya ejecutado
     header("HTTP/1.1 400 Bad Request");

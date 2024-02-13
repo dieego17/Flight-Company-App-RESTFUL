@@ -9,6 +9,11 @@
             $this->conexion = $this->getConexion();
         }
         
+        /**
+         * Método que devulve todos los aeropuertos
+         * 
+         * @return type
+         */
         public function getAll(){
             try {
                 $sql = "SELECT * FROM $this->table;";

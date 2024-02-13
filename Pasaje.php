@@ -20,6 +20,15 @@
             exit();
         }
     }
+    
+    // DELETE, borra el pasaje que le pasamos por parámetro
+    if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+        $idpasaje = $_GET['idpasaje'];
+        $res = $dep->deletePasaje($idpasaje);
+        $resul['resultado'] = $res;
+        echo json_encode($resul);
+        exit();
+    }
 
     // En caso de que ninguna de las opciones anteriores se haya ejecutado
     header("HTTP/1.1 400 Bad Request");
