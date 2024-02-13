@@ -74,5 +74,119 @@
             }
         }
         
+        
+        /**
+         * Metodo para insertar un pasaje a un vuelo
+         * 
+         * Se comprueba que no existen ni el pasajero ni el vuelo en la tabla,
+         * ni que el asiento este ocupado en ese vuelo
+         * 
+         * @param type $post
+         * @return string
+         */
+        public function insertarPasaje($post){
+            try {
+                // Comprobar si el pasajero y el vuelo ya existen en la tabla pasajes
+                $sql_check_pasajero_vuelo = "SELECT COUNT(*) as count FROM $this->table WHERE pasajerocod = ? AND identificador = ?";
+                $stmt = $this->conexion->prepare($sql_check_pasajero_vuelo);
+                $stmt->bindParam(1, $post['pasajerocod']);
+                $stmt->bindParam(2, $post['identificador']);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                $vuelo_existente = $result['count'];
+
+                if ($vuelo_existente > 0) {
+                    return "ERROR AL INSERTAR. EL PASAJERO " . $post['pasajerocod'] . " YA ESTÁ EN EL VUELO " . $post['identificador'];
+                    exit();
+                }
+
+                // Comprobar si el asiento está ocupado en el vuelo
+                $sql_check_asiento = "SELECT COUNT(*) as count FROM $this->table WHERE identificador = ? AND numasiento = ?";
+                $stmt = $this->conexion->prepare($sql_check_asiento);
+                $stmt->bindParam(1, $post['identificador']);
+                $stmt->bindParam(2, $post['numasiento']);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                $asiento_ocupado = $result['count'];
+
+                if ($asiento_ocupado > 0) {
+                    return "ERROR AL INSERTAR. EL NÚMERO DE ASIENTO " . $post['numasiento'] . " YA ESTÁ OCUPADO EN EL VUELO " . $post['identificador'];
+                    exit(); 
+                }
+
+                // Insertar el pasaje
+                $sql = "INSERT INTO $this->table (pasajerocod, identificador, numasiento, clase, pvp) VALUES (?, ?, ?, ?, ?)";
+                $sentencia = $this->conexion->prepare($sql);
+                $sentencia->bindParam(1, $post['pasajerocod']);
+                $sentencia->bindParam(2, $post['identificador']);
+                $sentencia->bindParam(3, $post['numasiento']);
+                $sentencia->bindParam(4, $post['clase']);
+                $sentencia->bindParam(5, $post['pvp']);
+                $sentencia->execute();
+
+                return "REGISTRO INSERTADO CORRECTAMENTE";
+            } catch (PDOException $e) {
+                return "Error al grabar.<br>". $e->getMessage();
+            }
+        }
+        
+        
+        /**
+         * Metodo para actualizar un pasaje a un vuelo
+         * 
+         * Se comprueba que no existen ni el pasajero ni el vuelo en la tabla,
+         * ni que el asiento este ocupado en ese vuelo
+         * 
+         * @param type $post
+         * @return string
+         */
+        public function actualizarPasaje($post){
+            try {
+                // Comprobar si el pasajero y el vuelo ya existen en la tabla pasajes
+                $sql_check_pasajero_vuelo = "SELECT COUNT(*) as count FROM $this->table WHERE pasajerocod = ? AND identificador = ?";
+                $stmt = $this->conexion->prepare($sql_check_pasajero_vuelo);
+                $stmt->bindParam(1, $post['pasajerocod']);
+                $stmt->bindParam(2, $post['identificador']);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                $vuelo_existente = $result['count'];
+
+                if ($vuelo_existente > 0) {
+                    return "ERROR AL ACTUALIZAR. EL PASAJERO " . $post['pasajerocod'] . " YA ESTÁ EN EL VUELO " . $post['identificador'];
+                    exit();
+                }
+
+                // Comprobar si el asiento está ocupado en el vuelo
+                $sql_check_asiento = "SELECT COUNT(*) as count FROM $this->table WHERE identificador = ? AND numasiento = ?";
+                $stmt = $this->conexion->prepare($sql_check_asiento);
+                $stmt->bindParam(1, $post['identificador']);
+                $stmt->bindParam(2, $post['numasiento']);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                $asiento_ocupado = $result['count'];
+
+                if ($asiento_ocupado > 0) {
+                    return "ERROR AL ACTUALIZAR. EL NÚMERO DE ASIENTO " . $post['numasiento'] . " YA ESTÁ OCUPADO EN EL VUELO " . $post['identificador'];
+                    exit(); 
+                }
+
+                // Actualizar el pasaje
+                $sql = "UPDATE $this->table SET pasajerocod = ?, identificador = ?, numasiento = ?, clase = ?, pvp = ? WHERE idpasaje = ?";
+                $sentencia = $this->conexion->prepare($sql);
+                $sentencia->bindParam(1, $post['pasajerocod']);
+                $sentencia->bindParam(2, $post['identificador']);
+                $sentencia->bindParam(3, $post['numasiento']);
+                $sentencia->bindParam(4, $post['clase']);
+                $sentencia->bindParam(5, $post['pvp']);
+                $sentencia->bindParam(6, $post['idpasaje']);
+                $sentencia->execute();
+
+                return "REGISTRO ACTUALIZADO CORRECTAMENTE";
+            } catch (PDOException $e) {
+                return "Error al grabar.<br>". $e->getMessage();
+            }
+        }
+
+        
     }
 
