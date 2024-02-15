@@ -20,8 +20,30 @@
                 $statement = $this->conexion->query($sql);
                 $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
                 $statement = null;
+
+                $sql1 = "SELECT p.pasajerocod, p.nombre FROM $this->table pa JOIN pasajero p ON pa.pasajerocod = p.pasajerocod GROUP BY p.pasajerocod;";
+                $statement1 = $this->conexion->query($sql1);
+                $registros1 = $statement1->fetchAll(PDO::FETCH_ASSOC);
+                $statement1 = null;
+                
+                $sql2 = "SELECT pa.identificador, v.aeropuertoorigen, v.aeropuertodestino FROM $this->table pa JOIN vuelo v ON pa.identificador = v.identificador GROUP BY v.identificador;";
+                $statement2 = $this->conexion->query($sql2);
+                $registros2 = $statement2->fetchAll(PDO::FETCH_ASSOC);
+                $statement2 = null;
+                
                 // Retorna el array de registros
-                return $registros;
+                return array('resgistros'=>$registros, 'registros1'=>$registros1, 'registros2' =>$registros2);
+                
+            } catch (PDOException $e) {
+                return "ERROR AL CARGAR.<br>" . $e->getMessage();
+            }
+        }
+        
+        public function getAllVuelosPasajeros() {
+            try{
+                
+                
+                
             } catch (PDOException $e) {
                 return "ERROR AL CARGAR.<br>" . $e->getMessage();
             }
