@@ -26,7 +26,7 @@
                 $registros1 = $statement1->fetchAll(PDO::FETCH_ASSOC);
                 $statement1 = null;
                 
-                $sql2 = "SELECT pa.identificador, v.aeropuertoorigen, v.aeropuertodestino FROM $this->table pa JOIN vuelo v ON pa.identificador = v.identificador GROUP BY v.identificador;";
+                $sql2 = "SELECT identificador, aeropuertoorigen, aeropuertodestino FROM vuelo;";
                 $statement2 = $this->conexion->query($sql2);
                 $registros2 = $statement2->fetchAll(PDO::FETCH_ASSOC);
                 $statement2 = null;
