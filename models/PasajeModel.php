@@ -162,45 +162,45 @@
          * @param type $post
          * @return string
          */
-        public function actualizarPasaje($post){
+        public function actualizarPasaje($put){
             try {
                 // Comprobar si el pasajero y el vuelo ya existen en la tabla pasajes
                 $sql_check_pasajero_vuelo = "SELECT COUNT(*) as count FROM $this->table WHERE pasajerocod = ? AND identificador = ?";
                 $stmt = $this->conexion->prepare($sql_check_pasajero_vuelo);
-                $stmt->bindParam(1, $post['pasajerocod']);
-                $stmt->bindParam(2, $post['identificador']);
+                $stmt->bindParam(1, $put['pasajerocod']);
+                $stmt->bindParam(2, $put['identificador']);
                 $stmt->execute();
                 $result = $stmt->fetch(PDO::FETCH_ASSOC);
                 $vuelo_existente = $result['count'];
 
                 if ($vuelo_existente > 0) {
-                    return "ERROR AL ACTUALIZAR. EL PASAJERO " . $post['pasajerocod'] . " YA ESTÁ EN EL VUELO " . $post['identificador'];
+                    return "ERROR AL ACTUALIZAR. EL PASAJERO " . $put['pasajerocod'] . " YA ESTA EN EL VUELO " . $put['identificador'];
                     exit();
                 }
 
                 // Comprobar si el asiento está ocupado en el vuelo
                 $sql_check_asiento = "SELECT COUNT(*) as count FROM $this->table WHERE identificador = ? AND numasiento = ?";
                 $stmt = $this->conexion->prepare($sql_check_asiento);
-                $stmt->bindParam(1, $post['identificador']);
-                $stmt->bindParam(2, $post['numasiento']);
+                $stmt->bindParam(1, $put['identificador']);
+                $stmt->bindParam(2, $put['numasiento']);
                 $stmt->execute();
                 $result = $stmt->fetch(PDO::FETCH_ASSOC);
                 $asiento_ocupado = $result['count'];
 
                 if ($asiento_ocupado > 0) {
-                    return "ERROR AL ACTUALIZAR. EL NÚMERO DE ASIENTO " . $post['numasiento'] . " YA ESTÁ OCUPADO EN EL VUELO " . $post['identificador'];
+                    return "ERROR AL ACTUALIZAR. EL NÚMERO DE ASIENTO " . $put['numasiento'] . " YA ESTÁ OCUPADO EN EL VUELO " . $put['identificador'];
                     exit(); 
                 }
 
                 // Actualizar el pasaje
                 $sql = "UPDATE $this->table SET pasajerocod = ?, identificador = ?, numasiento = ?, clase = ?, pvp = ? WHERE idpasaje = ?";
                 $sentencia = $this->conexion->prepare($sql);
-                $sentencia->bindParam(1, $post['pasajerocod']);
-                $sentencia->bindParam(2, $post['identificador']);
-                $sentencia->bindParam(3, $post['numasiento']);
-                $sentencia->bindParam(4, $post['clase']);
-                $sentencia->bindParam(5, $post['pvp']);
-                $sentencia->bindParam(6, $post['idpasaje']);
+                $sentencia->bindParam(1, $put['pasajerocod']);
+                $sentencia->bindParam(2, $put['identificador']);
+                $sentencia->bindParam(3, $put['numasiento']);
+                $sentencia->bindParam(4, $put['clase']);
+                $sentencia->bindParam(5, $put['pvp']);
+                $sentencia->bindParam(6, $put['idpasaje']);
                 $sentencia->execute();
 
                 return "REGISTRO ACTUALIZADO CORRECTAMENTE";

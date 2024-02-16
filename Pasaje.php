@@ -47,8 +47,8 @@
     // Los campos del array que venga se deberán llamar como los campos de la tabla
     //Pasaje
     if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
-        $post = json_decode(file_get_contents('php://input'), true);
-        $res = $pasaje->actualizarPasaje($post);
+        $put = json_decode(file_get_contents('php://input'), true);
+        $res = $pasaje->actualizarPasaje($put);
         $resul['mensaje'] = $res;
         echo json_encode($resul);
         exit();
