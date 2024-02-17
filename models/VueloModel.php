@@ -20,7 +20,7 @@
                 $sql = "SELECT v.identificador, v.aeropuertoorigen, aeropuerto_origen.nombre 'nombreorigen', 
                     aeropuerto_origen.pais 'paisorigen', v.aeropuertodestino, a.nombre 'nombredestino', 
                     a.pais 'paisdestino', v.tipovuelo, v.fechavuelo, COUNT(p.identificador) 'numpasajero' 
-                    FROM vuelo v 
+                    FROM $this->table v 
                     LEFT JOIN pasaje p ON (v.identificador = p.identificador) 
                     JOIN aeropuerto a ON v.aeropuertodestino = a.codaeropuerto 
                     JOIN aeropuerto aeropuerto_origen ON v.aeropuertoorigen = aeropuerto_origen.codaeropuerto 
@@ -45,7 +45,14 @@
          */
         public function getUnVuelo($identificador){
             try {
-                $sql = "SELECT * FROM vuelo WHERE identificador = ?;";
+                $sql = "SELECT v.identificador, v.aeropuertoorigen, aeropuerto_origen.nombre 'nombreorigen', 
+                        aeropuerto_origen.pais 'paisorigen', v.aeropuertodestino, a.nombre 'nombredestino', 
+                        a.pais 'paisdestino', v.tipovuelo, v.fechavuelo, COUNT(p.identificador) 'numpasajero' 
+                        FROM vuelo v LEFT JOIN pasaje p ON (v.identificador = p.identificador) 
+                        JOIN aeropuerto a ON v.aeropuertodestino = a.codaeropuerto 
+                        JOIN aeropuerto aeropuerto_origen ON v.aeropuertoorigen = aeropuerto_origen.codaeropuerto
+                        WHERE v.identificador = ? GROUP BY v.identificador;";
+                
                 $sentencia = $this->conexion->prepare($sql);
                 $sentencia->bindParam(1, $identificador);
                 $sentencia->execute();
@@ -68,7 +75,7 @@
          */
         public function deleteVuelo($identificador){
             try {
-                $sql = "DELETE FROM vuelo WHERE identificador= ? ";
+                $sql = "DELETE FROM $this->table WHERE identificador= ? ";
                 $sentencia = $this->conexion->prepare($sql);
                 $sentencia->bindParam(1, $identificador);
                 $num = $sentencia->execute();
