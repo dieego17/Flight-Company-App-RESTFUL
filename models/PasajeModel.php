@@ -39,15 +39,7 @@
             }
         }
         
-        public function getAllVuelosPasajeros() {
-            try{
-                
-                
-                
-            } catch (PDOException $e) {
-                return "ERROR AL CARGAR.<br>" . $e->getMessage();
-            }
-        }
+        
         
         /**
          * Método que boora un psaje en concreto
@@ -79,7 +71,7 @@
          */
         public function getUnPasaje($identificador){
             try {
-                $sql = "SELECT ps.idpasaje, p.nombre, p.pais, ps.pasajerocod, ps.numasiento, ps.clase, ps.pvp "
+                $sql = "SELECT ps.idpasaje, ps.pasajerocod, p.nombre, p.pais, ps.numasiento, ps.clase, ps.pvp "
                         . "FROM $this->table ps "
                         . "JOIN pasajero p ON ps.pasajerocod = p.pasajerocod "
                         . "WHERE ps.identificador = ?;";
