@@ -200,6 +200,29 @@
                 return "Error al grabar.<br>". $e->getMessage();
             }
         }
+        
+        public function getPasajesDetalle($id) {
+            try {
+                $sql = "SELECT * FROM pasaje WHERE identificador = ?;";
+                $sentencia = $this->conexion->prepare($sql);
+                $sentencia->bindParam(1, $id);
+                $sentencia->execute();
+                $registros = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
+                $sql1 = "SELECT pa.* FROM pasaje p JOIN pasajero pa ON p.pasajerocod = pa.pasajerocod WHERE p.identificador = ?;";
+                $sentencia1 = $this->conexion->prepare($sql1);
+                $sentencia1->bindParam(1, $id);
+                $sentencia1->execute();
+                $registros1 = $sentencia1->fetchAll(PDO::FETCH_ASSOC);
+
+                if ($registros && $registros1) {
+                    return array("registros" => $registros, "registros1" => $registros1);
+                }
+                return false;
+            } catch (PDOException $e) {
+                return "ERROR AL CARGAR.<br>" . $e->getMessage();
+            }
+        }
 
         
     }

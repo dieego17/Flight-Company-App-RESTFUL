@@ -25,7 +25,6 @@
                     JOIN aeropuerto a ON v.aeropuertodestino = a.codaeropuerto 
                     JOIN aeropuerto aeropuerto_origen ON v.aeropuertoorigen = aeropuerto_origen.codaeropuerto 
                     GROUP BY v.identificador;";
-                
                 $statement = $this->conexion->query($sql);
                 $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
                 $statement = null;
@@ -35,6 +34,33 @@
                 return "ERROR AL CARGAR.<br>" . $e->getMessage();
             }
         }
+        
+        
+        /**
+         * Método que devuelve todos los vuelos
+         * 
+         * @return type
+         */
+        /*public function getAll(){
+            try {
+                $sql = "SELECT v.identificador, v.aeropuertoorigen, aeropuerto_origen.nombre 'nombreorigen', 
+                    aeropuerto_origen.pais 'paisorigen', v.aeropuertodestino, a.nombre 'nombredestino', 
+                    a.pais 'paisdestino', v.tipovuelo, v.fechavuelo, COUNT(p.identificador) 'numpasajero' 
+                    FROM $this->table v 
+                    LEFT JOIN pasaje p ON (v.identificador = p.identificador) 
+                    JOIN aeropuerto a ON v.aeropuertodestino = a.codaeropuerto 
+                    JOIN aeropuerto aeropuerto_origen ON v.aeropuertoorigen = aeropuerto_origen.codaeropuerto 
+                    GROUP BY v.identificador;";
+                
+                $statement = $this->conexion->query($sql);
+                $registros = $statement->fetchAll(PDO::FETCH_ASSOC);
+                $statement = null;
+                // Retorna el array de registros
+                return $registros;
+            } catch (PDOException $e) {
+                return "ERROR AL CARGAR.<br>" . $e->getMessage();
+            }
+        }*/
 
         
         /**
