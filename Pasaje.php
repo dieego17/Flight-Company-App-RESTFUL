@@ -14,6 +14,10 @@
             $res = $pasaje->getUnPasaje($_GET['identificador']);
             echo json_encode($res);
             exit();
+        }else if(isset($_GET['id'])) {
+            $res = $pasaje->pasajeDetalles($_GET['id']);
+            echo json_encode($res);
+            exit();
         } else {
             $res = $pasaje->getAll();
             echo json_encode($res);
