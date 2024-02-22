@@ -54,9 +54,9 @@
                 $sentencia->bindParam(1, $idpasaje);
                 $num = $sentencia->execute();
                 if ($sentencia->rowCount() == 0)
-                return "Registro NO Borrado, no se localiza: " . $idpasaje;
+                    return "Registro NO Borrado, no se localiza: " . $idpasaje;
                 else
-                return "Registro Borrado: " . $idpasaje;
+                    return "Registro Borrado: " . $idpasaje;
             } catch (PDOException $e) {
                 return "ERROR AL BORRAR.<br>" . $e->getMessage();
             }
@@ -201,28 +201,34 @@
             }
         }
         
+        /**
+         * Obtiene detalles de un pasaje según su identificador.
+         * 
+         * @param type $id
+         * @return bool
+         */
         public function pasajeDetalles($id) {
-        try {
-            $sql = "SELECT * FROM pasaje WHERE identificador = ?;";
-            $sentencia = $this->conexion->prepare($sql);
-            $sentencia->bindParam(1, $id);
-            $sentencia->execute();
-            $registros = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-            
-            $sql1 = "SELECT ps.* FROM pasaje p JOIN pasajero ps ON p.pasajerocod = ps.pasajerocod WHERE p.identificador = ?;";
-            $sentencia1 = $this->conexion->prepare($sql1);
-            $sentencia1->bindParam(1, $id);
-            $sentencia1->execute();
-            $registros1 = $sentencia1->fetchAll(PDO::FETCH_ASSOC);
-            
-            if ($registros && $registros1) {
-                return array("registros" => $registros, "registros1" => $registros1);
+            try {
+                $sql = "SELECT * FROM $this->table WHERE identificador = ?;";
+                $sentencia = $this->conexion->prepare($sql);
+                $sentencia->bindParam(1, $id);
+                $sentencia->execute();
+                $registros = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
+                $sql1 = "SELECT p.* FROM $this->table pa JOIN pasajero p ON pa.pasajerocod = p.pasajerocod WHERE pa.identificador = ?;";
+                $sentencia1 = $this->conexion->prepare($sql1);
+                $sentencia1->bindParam(1, $id);
+                $sentencia1->execute();
+                $registros1 = $sentencia1->fetchAll(PDO::FETCH_ASSOC);
+
+                if ($registros && $registros1) {
+                    return array("registros" => $registros, "registros1" => $registros1);
+                }
+                return false;
+            } catch (PDOException $e) {
+                return "ERROR AL CARGAR.<br>" . $e->getMessage();
             }
-            return false;
-        } catch (PDOException $e) {
-            return "ERROR AL CARGAR.<br>" . $e->getMessage();
         }
-    }
 
         
     }
